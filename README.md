@@ -13,7 +13,7 @@ I’m **CosmicHackerX**, a cybersecurity researcher and ethical hacker. I build 
 - Automation & Tooling  
 - Community Driven
 
-👉 [View my Resume](#) (link to your resume)
+👉 [View my Resume](https://github.com/cosmichackerx/cosmichackerx.github.io/blob/main/resources/cosmichackerx.pdf) 
 
 ---
 
