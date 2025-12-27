@@ -21,15 +21,15 @@ I’m **CosmicHackerX**, a cybersecurity researcher and ethical hacker. I build 
 
 ### WiFi Password Tester
 A **Java Swing GUI** application for Wi-Fi scanning and dictionary-based password testing.  
-👉 [View on GitHub](#)
+👉 [View on GitHub](https://github.com/cosmichackerx/wifi-password-tester-gui)
 
 ### AI Mood Music Recommender
 A **Python CLI** tool that recommends music based on sentiment analysis.  
-👉 [View on GitHub](#)
+👉 [View on GitHub](https://github.com/cosmichackerx/AI-mood_music_recommender)
 
 ### xTerminal
 This site — a developer portfolio and central hub for tools and projects.  
-👉 [View on GitHub](#)
+👉 [View on GitHub](https://cosmichackerx.github.io)
 
 ---
 
