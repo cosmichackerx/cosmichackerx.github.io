@@ -62,9 +62,9 @@ Access and launch tools directly on the site.
 Let’s collaborate or connect:
 
 - GitHub: https://github.com/cosmichackerx  
-- Email: (add your email here)  
-- Twitter: (add your handle here)  
-- LinkedIn: (add your profile here)
+- Email: cosmichackerx@gmail.com  
+- Twitter: https://x.com/cosmichackerx 
+- LinkedIn: https://www.linkedin.com/in/cosmichackerx
 
 ---
 
