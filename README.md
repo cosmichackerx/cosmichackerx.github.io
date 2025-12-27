@@ -1,1 +1,71 @@
-# cosmichackerx.github.io
+# xTerminal
+
+> Developer portfolio and tool hub by **CosmicHackerX**
+
+Welcome to **xTerminal** — a personal portfolio showcasing my projects, tools, services, and security expertise.
+
+## About Me
+
+I’m **CosmicHackerX**, a cybersecurity researcher and ethical hacker. I build tools, break systems responsibly, and design defenses that scale.
+
+- Curious & Analytical  
+- Ethical Security Research  
+- Automation & Tooling  
+- Community Driven
+
+👉 [View my Resume](#) (link to your resume)
+
+---
+
+## Projects
+
+### WiFi Password Tester
+A **Java Swing GUI** application for Wi-Fi scanning and dictionary-based password testing.  
+👉 [View on GitHub](#)
+
+### AI Mood Music Recommender
+A **Python CLI** tool that recommends music based on sentiment analysis.  
+👉 [View on GitHub](#)
+
+### xTerminal
+This site — a developer portfolio and central hub for tools and projects.  
+👉 [View on GitHub](#)
+
+---
+
+## Services
+
+I offer professional services in:
+
+### Security Audits
+Vulnerability assessments and penetration testing for web, mobile, and network environments.
+
+### Custom Tools
+Automation utilities, security toolchains, and bespoke scripting for research and defense.
+
+### AI Integration
+Machine-learning-powered automation, security workflows, and analytical tooling.
+
+---
+
+## Tools
+
+- **Password Generator** – Secure password creation utility.  
+- **Spin Wheel Automation** – Demo automation for random selection and rewards.
+
+Access and launch tools directly on the site.
+
+---
+
+## Connect
+
+Let’s collaborate or connect:
+
+- GitHub: https://github.com/cosmichackerx  
+- Email: (add your email here)  
+- Twitter: (add your handle here)  
+- LinkedIn: (add your profile here)
+
+---
+
+© 2025 xTerminal • Built with GitHub Pages
