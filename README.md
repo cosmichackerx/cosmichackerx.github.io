@@ -68,4 +68,4 @@ Let’s collaborate or connect:
 
 ---
 
-© 2025 xTerminal • Built with GitHub Pages
+© 2026 xTerminal • Built with GitHub Pages
