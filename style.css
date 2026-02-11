@@ -114,7 +114,20 @@ body { font-family:"Courier New", monospace; background:#020617; color:#dcfce7; 
   transform: scale(1.05);
 }
 
-/* ===== ORBITING NODES ===== */
+/* ===== ORBITING NODES (ROUNDABOUT ANIMATION) ===== */
+.orbit-track {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  animation: orbit-spin 20s linear infinite; /* Rotates the whole track */
+  z-index: 20;
+}
+
+@keyframes orbit-spin {
+  100% { transform: rotate(360deg); }
+}
+
 .cyber-node {
   position: absolute;
   width: 60px;
@@ -129,39 +142,45 @@ body { font-family:"Courier New", monospace; background:#020617; color:#dcfce7; 
   font-size: 22px;
   text-decoration: none;
   box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
-  transition: all 0.3s ease;
-  z-index: 20;
+  /* Counter-rotation keeps icons upright while the track spins */
+  animation: counter-orbit-spin 20s linear infinite; 
+  transition: box-shadow 0.3s ease, text-shadow 0.3s ease, background 0.3s ease;
+}
+
+@keyframes counter-orbit-spin {
+  100% { transform: rotate(-360deg); }
+}
+
+/* Pause the roundabout when the user hovers over it */
+.orbit-track:hover,
+.orbit-track:hover .cyber-node {
+  animation-play-state: paused;
 }
 
 .cyber-node:hover {
   background: rgba(0, 255, 65, 0.2);
   box-shadow: 0 0 25px #00ff41;
-  transform: scale(1.15);
   text-shadow: 0 0 10px #00ff41;
 }
 
-/* Positioning the nodes around the circle (Radar layout) */
-.node-top { top: -30px; left: 50%; transform: translateX(-50%); }
-.node-top:hover { transform: translateX(-50%) scale(1.15); }
-
-.node-left { top: 50%; left: -30px; transform: translateY(-50%); }
-.node-left:hover { transform: translateY(-50%) scale(1.15); }
-
-.node-right { top: 50%; right: -30px; transform: translateY(-50%); }
-.node-right:hover { transform: translateY(-50%) scale(1.15); }
-
-.node-bottom-left { bottom: 30px; left: 40px; }
-.node-bottom-right { bottom: 30px; right: 40px; }
+/* Positioning without using transform (so animations work) */
+.node-top { top: -30px; left: calc(50% - 30px); }
+.node-left { top: calc(50% - 30px); left: -30px; }
+.node-right { top: calc(50% - 30px); right: -30px; }
+.node-bottom-left { bottom: 30px; left: 30px; }
+.node-bottom-right { bottom: 30px; right: 30px; }
 
 
-/* ===== BLUEPRINT BOTTOM NAV ===== */
+/* ===== BLUEPRINT BOTTOM NAV (FIXED OVERLAP) ===== */
 .hero-bottom-nav {
   display: flex;
   gap: 20px;
   color: #00ff41;
   font-size: 18px;
   letter-spacing: 2px;
-  margin-top: 20px;
+  margin-top: 60px; /* Increased margin pushes it down from radar */
+  position: relative;
+  z-index: 30; /* Brings it to the front */
 }
 
 .hero-bottom-nav span { cursor: pointer; transition: text-shadow 0.3s; }
@@ -210,17 +229,18 @@ footer { text-align:center; padding:25px; font-size:13px; color:#64748b; border-
   .navbar{flex-direction:column;} 
   .navbar button{margin:8px 0;} 
   .blueprint-title { display: block !important; margin: 10px 0; }
-  .cyber-radar-container { width: 320px; height: 320px; }
+  .cyber-radar-container { width: 320px; height: 320px; margin-bottom: 20px; }
   .cyber-radar-container::before { width: 220px; height: 220px; }
   .radar-core { width: 200px; height: 200px; }
   #terminal { font-size: 11px; margin-bottom: 10px; }
   .core-launch-btn { width: 70px; height: 70px; font-size: 10px; }
   .core-launch-btn i { font-size: 18px; }
   .cyber-node { width: 45px; height: 45px; font-size: 16px; }
-  .node-top { top: -20px; }
-  .node-left { left: -20px; }
-  .node-right { right: -20px; }
-  .node-bottom-left { bottom: 10px; left: 20px; }
-  .node-bottom-right { bottom: 10px; right: 20px; }
-  .hero-bottom-nav { font-size: 14px; gap: 10px; }
+  /* Updated mobile positioning math */
+  .node-top { top: -22px; left: calc(50% - 22px); }
+  .node-left { top: calc(50% - 22px); left: -22px; }
+  .node-right { top: calc(50% - 22px); right: -22px; }
+  .node-bottom-left { bottom: 15px; left: 15px; }
+  .node-bottom-right { bottom: 15px; right: 15px; }
+  .hero-bottom-nav { font-size: 14px; gap: 10px; margin-top: 40px; }
 }
