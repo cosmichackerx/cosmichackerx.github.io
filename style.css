@@ -33,7 +33,73 @@ body { font-family:"Courier New", monospace; background:#020617; color:#e5e7eb; 
 .hero { min-height:90vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:40px; }
 .cta-btn { padding:12px 28px; background:#22d3ee; color:#020617; text-decoration:none; font-weight:bold; border-radius:4px; transition: transform 0.3s, box-shadow 0.3s; }
 .cta-btn:hover { transform:translateY(-3px); box-shadow:0 0 18px #22d3ee; }
-#terminal { white-space:pre; font-size:22px; color:#22d3ee; text-shadow:0 0 8px #22d3ee; }
+#terminal { white-space:pre; font-size:22px; color:#22d3ee; text-shadow:0 0 8px #22d3ee; margin-bottom: 20px; }
+
+/* ===== HACKER CIRCLE LINKS ===== */
+.hacker-links-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+  margin-top: 20px;
+  z-index: 10;
+}
+
+.mt-main {
+  margin-top: 40px; /* Pushes the main CTA button down below the circles */
+}
+
+.cyber-circle {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 2px solid #0f172a; /* Dark border by default */
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+  background: #020617;
+  text-decoration: none;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Image preview styling */
+.cyber-circle img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.3; /* Keep it dark so the icon stands out */
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Icon overlay styling */
+.cyber-circle .overlay {
+  position: relative;
+  z-index: 2;
+  color: #94a3b8; /* Muted gray by default */
+  font-size: 28px;
+  transition: all 0.3s ease;
+}
+
+/* HOVER EFFECTS - The Hacker Glow */
+.cyber-circle:hover {
+  border-color: #22d3ee;
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.6), inset 0 0 15px rgba(34, 211, 238, 0.2);
+  transform: translateY(-5px) scale(1.1);
+}
+
+.cyber-circle:hover img {
+  opacity: 0.6;
+  transform: scale(1.2); /* Slight zoom on image */
+}
+
+.cyber-circle:hover .overlay {
+  color: #22d3ee; /* Neon Cyan text */
+  text-shadow: 0 0 10px #22d3ee;
+}
 
 /* ===== SECTIONS ===== */
 .section { padding:80px 40px; }
@@ -63,4 +129,8 @@ body { font-family:"Courier New", monospace; background:#020617; color:#e5e7eb; 
 footer { text-align:center; padding:25px; font-size:13px; color:#64748b; border-top:1px solid #0f172a; }
 
 /* ===== RESPONSIVE ===== */
-@media (max-width:768px){ .navbar{flex-direction:column;} .navbar button{margin:8px 0;} .hero h2{font-size:32px;} }
+@media (max-width:768px){ 
+  .navbar{flex-direction:column;} 
+  .navbar button{margin:8px 0;} 
+  .hero h2{font-size:32px;} 
+}
