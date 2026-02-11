@@ -96,9 +96,13 @@ const lines = [
 
 let lineIndex = 0;
 let charIndex = 0;
+let isTyping = true; // Flag to check if initial boot is done
 
 function typeTerminal() {
-  if (lineIndex >= lines.length) return;
+  if (lineIndex >= lines.length) {
+    isTyping = false;
+    return;
+  }
   
   if (charIndex < lines[lineIndex].length) {
     terminal.textContent += lines[lineIndex].charAt(charIndex);
@@ -115,7 +119,39 @@ function typeTerminal() {
 /* ========== WINDOW RESIZE ========== */
 // Handle window resize dynamically without breaking the rain
 window.addEventListener("resize", () => {
-  // Optional: Debounce this if you want it even more optimized
   initMatrix();
 });
 
+/* ========== HACKER CIRCLE INTERACTION (NEW) ========== */
+// Makes the terminal react when you hover over your new quick links
+const cyberLinks = document.querySelectorAll('.cyber-circle');
+
+cyberLinks.forEach(link => {
+  link.addEventListener('mouseenter', (e) => {
+    // Only trigger if the initial boot sequence is finished
+    if (!isTyping) {
+      const targetName = e.currentTarget.getAttribute('title');
+      
+      // Clear the terminal and type the new target
+      terminal.textContent = "> Access granted.\n> Welcome, Operator.\n";
+      let hoverText = `> Executing module: [${targetName}]...`;
+      let i = 0;
+      
+      function typeHover() {
+        if (i < hoverText.length) {
+          terminal.textContent += hoverText.charAt(i);
+          i++;
+          setTimeout(typeHover, 30);
+        }
+      }
+      typeHover();
+    }
+  });
+
+  link.addEventListener('mouseleave', () => {
+    if (!isTyping) {
+       // Reset terminal to base state when mouse leaves
+       terminal.textContent = "> Access granted.\n> Welcome, Operator.\n> Awaiting input...";
+    }
+  });
+});
