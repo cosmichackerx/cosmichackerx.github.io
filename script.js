@@ -102,6 +102,10 @@ let isTyping = true; // Flag to check if initial boot is done
 function typeTerminal() {
   if (lineIndex >= lines.length) {
     isTyping = false;
+    // Add default waiting state after initial boot
+    setTimeout(() => {
+      terminal.textContent = "> Access granted.\n> Welcome, Operator.\n> Awaiting input...";
+    }, 1000);
     return;
   }
   
@@ -123,14 +127,16 @@ window.addEventListener("resize", () => {
   initMatrix();
 });
 
-/* ========== RADAR ORBIT INTERACTION (UPDATED) ========== */
-// Makes the terminal react when you hover over your orbiting radar nodes
+/* ========== RADAR ORBIT INTERACTION (UPDATED & BUG-FIXED) ========== */
 const cyberLinks = document.querySelectorAll('.cyber-node');
+let hoverTimeout; // Prevents overlapping text if user hovers quickly
 
 cyberLinks.forEach(link => {
   link.addEventListener('mouseenter', (e) => {
     // Only trigger if the initial boot sequence is finished
     if (!isTyping) {
+      clearTimeout(hoverTimeout); // Stop any ongoing typing from previous hovers
+      
       const targetName = e.currentTarget.getAttribute('title');
       
       // Clear the terminal and type the new target
@@ -142,7 +148,7 @@ cyberLinks.forEach(link => {
         if (i < hoverText.length) {
           terminal.textContent += hoverText.charAt(i);
           i++;
-          setTimeout(typeHover, 30);
+          hoverTimeout = setTimeout(typeHover, 30);
         }
       }
       typeHover();
@@ -151,6 +157,7 @@ cyberLinks.forEach(link => {
 
   link.addEventListener('mouseleave', () => {
     if (!isTyping) {
+       clearTimeout(hoverTimeout); // Stop typing immediately if mouse leaves early
        // Reset terminal to base state when mouse leaves
        terminal.textContent = "> Access granted.\n> Welcome, Operator.\n> Awaiting input...";
     }
