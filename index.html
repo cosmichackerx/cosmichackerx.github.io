@@ -27,6 +27,7 @@
 
   <header class="navbar">
     <h1 class="logo">x<span>Terminal</span></h1>
+    <div class="blueprint-title" style="display: none;">Portfolio HackerX</div> 
     <nav>
       <button onclick="scrollToSection('home')">Home</button>
       <button onclick="scrollToSection('about')">About</button>
@@ -37,36 +38,47 @@
     </nav>
   </header>
 
-  <section id="home" class="hero">
-    <pre id="terminal"></pre>
-
-    <div class="hacker-links-container">
+  <section id="home" class="hero radar-hero">
+    
+    <div class="cyber-radar-container">
       
-      <a href="https://github.com/cosmichackerx" class="cyber-circle" title="X-BOT Project" target="_blank">
-        <img src="assets/xbot-bg.jpg" alt="X-BOT" onerror="this.style.display='none'">
-        <div class="overlay"><i class="fab fa-whatsapp"></i></div>
+      <div class="radar-core">
+        <pre id="terminal"></pre>
+        <a class="core-launch-btn" href="tools/password-generator.html" target="_blank">
+          <i class="fas fa-power-off"></i><br><span>Launch Tool</span>
+        </a>
+      </div>
+
+      <a href="https://github.com/cosmichackerx" class="cyber-node node-top" title="Listen to PDF" target="_blank">
+        <i class="fas fa-file-pdf"></i>
       </a>
 
-      <a href="https://github.com/cosmichackerx" class="cyber-circle" title="Listen to PDF" target="_blank">
-        <img src="assets/listentopdf-bg.jpg" alt="Listen to PDF" onerror="this.style.display='none'">
-        <div class="overlay"><i class="fas fa-file-pdf"></i></div>
+      <a href="https://github.com/cosmichackerx" class="cyber-node node-left" title="X-BOT Project" target="_blank">
+        <i class="fab fa-whatsapp"></i>
       </a>
 
-      <a href="https://github.com/cosmichackerx" class="cyber-circle" title="Speaker Cleaner Pro" target="_blank">
-        <img src="assets/speaker-bg.jpg" alt="Speaker Cleaner Pro" onerror="this.style.display='none'">
-        <div class="overlay"><i class="fas fa-volume-up"></i></div>
+      <a href="https://github.com/cosmichackerx" class="cyber-node node-right" title="Speaker Cleaner Pro" target="_blank">
+        <i class="fas fa-volume-up"></i>
       </a>
 
-      <a href="https://github.com/cosmichackerx/wifi-password-tester-gui" class="cyber-circle" title="WiFi Tester" target="_blank">
-        <img src="assets/wifi-bg.jpg" alt="WiFi Tester" onerror="this.style.display='none'">
-        <div class="overlay"><i class="fas fa-wifi"></i></div>
+      <a href="https://github.com/cosmichackerx/wifi-password-tester-gui" class="cyber-node node-bottom-right" title="WiFi Tester" target="_blank">
+        <i class="fas fa-wifi"></i>
+      </a>
+      
+      <a href="#contact" class="cyber-node node-bottom-left" title="Contact Comm" onclick="scrollToSection('contact')">
+        <i class="fas fa-comment-dots"></i>
       </a>
 
     </div>
 
-    <a class="cta-btn mt-main" href="tools/password-generator.html" target="_blank">
-      <i class="fab fa-github"></i> Launch Tool
-    </a>
+    <div class="hero-bottom-nav">
+      <span onclick="scrollToSection('about')">About Me</span>
+      <span class="divider">=</span>
+      <span onclick="scrollToSection('projects')">Projects</span>
+      <span class="divider">=</span>
+      <span onclick="scrollToSection('contact')">Contacts</span>
+    </div>
+
   </section>
 
   <section id="about" class="section">
