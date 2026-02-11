@@ -49,7 +49,8 @@ function drawMatrix() {
   ctx.fillStyle = "rgba(0,0,0,0.05)";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.fillStyle = "#22d3ee"; // Cyan text
+  // CHANGED: Neon green to match the Hacker Vibe blueprint images
+  ctx.fillStyle = "#00ff41"; 
   ctx.font = fontSize + "px monospace";
 
   for (let i = 0; i < drops.length; i++) {
@@ -122,9 +123,9 @@ window.addEventListener("resize", () => {
   initMatrix();
 });
 
-/* ========== HACKER CIRCLE INTERACTION (NEW) ========== */
-// Makes the terminal react when you hover over your new quick links
-const cyberLinks = document.querySelectorAll('.cyber-circle');
+/* ========== RADAR ORBIT INTERACTION (UPDATED) ========== */
+// Makes the terminal react when you hover over your orbiting radar nodes
+const cyberLinks = document.querySelectorAll('.cyber-node');
 
 cyberLinks.forEach(link => {
   link.addEventListener('mouseenter', (e) => {
