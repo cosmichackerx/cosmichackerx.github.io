@@ -37,7 +37,7 @@ let drops;
 function initMatrix() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-  
+   
   columns = Math.floor(canvas.width / fontSize);
   // Reset drops only if the size changed significantly or first run
   drops = Array(columns).fill(1);
@@ -49,7 +49,7 @@ function drawMatrix() {
   ctx.fillStyle = "rgba(0,0,0,0.05)";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // CHANGED: Neon green to match the Hacker Vibe blueprint images
+  // Neon green to match the Hacker Vibe
   ctx.fillStyle = "#00ff41"; 
   ctx.font = fontSize + "px monospace";
 
@@ -67,12 +67,12 @@ function drawMatrix() {
 
 // Animation Loop Control
 let lastTime = 0;
-const fps = 20; // Matches your original speed (1000ms / 50ms = 20fps)
+const fps = 20; // 20fps for that retro terminal feel
 const interval = 1000 / fps;
 
 function animate(timeStamp) {
   const deltaTime = timeStamp - lastTime;
-  
+   
   if (deltaTime > interval) {
     drawMatrix();
     lastTime = timeStamp - (deltaTime % interval);
@@ -108,7 +108,7 @@ function typeTerminal() {
     }, 1000);
     return;
   }
-  
+   
   if (charIndex < lines[lineIndex].length) {
     terminal.textContent += lines[lineIndex].charAt(charIndex);
     charIndex++;
@@ -127,7 +127,7 @@ window.addEventListener("resize", () => {
   initMatrix();
 });
 
-/* ========== RADAR ORBIT INTERACTION (UPDATED & BUG-FIXED) ========== */
+/* ========== RADAR ORBIT INTERACTION ========== */
 const cyberLinks = document.querySelectorAll('.cyber-node');
 let hoverTimeout; // Prevents overlapping text if user hovers quickly
 
@@ -136,14 +136,14 @@ cyberLinks.forEach(link => {
     // Only trigger if the initial boot sequence is finished
     if (!isTyping) {
       clearTimeout(hoverTimeout); // Stop any ongoing typing from previous hovers
-      
+       
       const targetName = e.currentTarget.getAttribute('title');
-      
+       
       // Clear the terminal and type the new target
       terminal.textContent = "> Access granted.\n> Welcome, Operator.\n";
       let hoverText = `> Executing module: [${targetName}]...`;
       let i = 0;
-      
+       
       function typeHover() {
         if (i < hoverText.length) {
           terminal.textContent += hoverText.charAt(i);
