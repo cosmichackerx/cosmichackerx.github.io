@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Linked Lists Masterclass - Interactive Code & Simulations</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-1: #3b82f6; /* Blue */
+            --accent-2: #8b5cf6; /* Purple */
+            --accent-3: #10b981; /* Emerald */
+            --accent-4: #f59e0b; /* Amber */
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+        
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-color), #020617);
+            color: var(--text-main);
+            margin: 0;
+            padding: 2rem;
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+
+        h1, h2, h3 {
+            background: linear-gradient(to right, #60a5fa, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-top: 0;
+        }
+
+        h1 { font-size: 3rem; text-align: center; margin-bottom: 3rem; }
+        h2 { font-size: 2rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 0.5rem; }
+
+        .container { max-width: 1400px; margin: 0 auto; }
+
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .complexity-table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; font-size: 0.95rem; }
+        .complexity-table th { background: rgba(255,255,255,0.05); padding: 1rem; text-align: left; border-bottom: 2px solid var(--glass-border); color: #fff; }
+        .complexity-table td { padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .good { color: #4ade80; font-weight: bold; }
+        .avg { color: #facc15; font-weight: bold; }
+        .bad { color: #f87171; font-weight: bold; }
+
+        .mnemonic {
+            font-size: 1.1rem;
+            color: #fbbf24;
+            margin: 1.5rem 0;
+            padding: 1rem 1.5rem;
+            background: rgba(245, 158, 11, 0.05);
+            border-left: 4px solid var(--accent-4);
+            border-radius: 0 8px 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1.3fr; gap: 2rem; align-items: start; }
+        @media (max-width: 1100px) { .grid-2 { grid-template-columns: 1fr; } }
+
+        .code-explorer {
+            background: #0f111a;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            overflow: hidden;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .tabs { display: flex; background: rgba(255,255,255,0.03); border-bottom: 1px solid var(--glass-border); overflow-x: auto; }
+
+        .tab-btn {
+            background: transparent; border: none; color: var(--text-muted);
+            padding: 1rem 1.2rem; cursor: pointer; font-size: 0.9rem; font-weight: 600;
+            transition: all 0.2s; white-space: nowrap; border-bottom: 2px solid transparent;
+        }
+
+        .tab-btn:hover { color: var(--text-main); background: rgba(255,255,255,0.05); }
+        .tab-btn.active { color: var(--accent-1); border-bottom: 2px solid var(--accent-1); background: rgba(59, 130, 246, 0.1); }
+
+        .code-panels pre {
+            margin: 0; padding: 1.5rem; overflow-x: auto;
+            font-family: 'Fira Code', monospace; font-size: 0.9rem; display: none;
+        }
+
+        .code-panels pre.active { display: block; animation: fadeIn 0.3s ease; }
+
+        .kw { color: #c678dd; } /* keyword */
+        .ty { color: #e5c07b; } /* type */
+        .fn { color: #61afef; } /* function */
+        .cm { color: #5c6370; font-style: italic; } /* comment */
+        .op { color: #56b6c2; } /* operator */
+        .nu { color: #d19a66; } /* number */
+
+        .simulation-container {
+            margin-top: 2rem; padding: 1.5rem; background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px; border: 1px dashed rgba(255, 255, 255, 0.2);
+        }
+
+        .controls-grid {
+            display: flex; gap: 0.8rem; margin-bottom: 1.5rem; flex-wrap: wrap;
+            background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .sim-btn {
+            background: rgba(59, 130, 246, 0.15); color: var(--text-main);
+            border: 1px solid rgba(59, 130, 246, 0.5); padding: 0.6rem 1rem;
+            border-radius: 6px; cursor: pointer; font-weight: 600;
+            transition: all 0.2s ease; font-size: 0.85rem;
+        }
+
+        .sim-btn:hover { background: var(--accent-1); box-shadow: 0 0 12px rgba(59, 130, 246, 0.5); transform: translateY(-2px); }
+        .sim-btn.search { border-color: #facc15; color: #facc15; }
+        .sim-btn.search:hover { background: rgba(250, 204, 21, 0.2); color: #facc15; }
+
+        .reset-btn { background: rgba(239, 68, 68, 0.15) !important; border-color: rgba(239, 68, 68, 0.5) !important; margin-left: auto; }
+        .reset-btn:hover { background: #ef4444 !important; }
+
+        .simulation-area {
+            display: flex; align-items: center; overflow-x: auto;
+            min-height: 120px; padding: 2rem 1rem; position: relative;
+        }
+
+        .node-wrapper { display: flex; align-items: center; animation: bounceIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
+        .node-box {
+            min-width: 80px; padding: 5px; background: linear-gradient(135deg, #1e293b, #334155);
+            border: 2px solid var(--accent-1); border-radius: 8px; display: flex;
+            flex-direction: column; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+            position: relative; z-index: 2; transition: all 0.3s ease; text-align: center;
+        }
+
+        .node-addr { font-size: 0.6rem; color: #a78bfa; margin-bottom: 4px; font-family: monospace; font-weight: bold; }
+        .node-data { flex: 1; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 4px 0; }
+        .node-ptr { font-size: 0.6rem; margin-top: 4px; font-family: monospace; font-weight: bold; background: rgba(0,0,0,0.3); border-radius: 4px; padding: 2px; }
+
+        .arrow { color: var(--text-muted); font-weight: bold; font-size: 1.5rem; margin: 0 8px; display: flex; align-items: center; }
+
+        .null-indicator {
+            color: #ef4444; font-weight: bold; font-family: monospace; padding: 4px 8px;
+            background: rgba(239, 68, 68, 0.1); border-radius: 4px; margin-left: 8px;
+        }
+
+        .simulation-area.has-nodes #singly-null::before { content: "→"; margin-right: 15px; color: var(--text-muted); font-size: 1.5rem; }
+        .simulation-area.has-nodes #doubly-null::before { content: "↔"; margin-right: 15px; color: var(--text-muted); font-size: 1.5rem; }
+
+        @keyframes bounceIn { from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .circular-line { position: absolute; border: 2px dashed var(--accent-2); z-index: 1; pointer-events: none; opacity: 0; transition: opacity 0.5s ease, width 0.3s ease; }
+        .circular-line.active { opacity: 0.6; }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Advanced Linked Lists Masterclass</h1>
+        
+        <div class="card" style="padding: 1.5rem 2.5rem;">
+            <h2>Big-O Time Complexity Benchmark</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Comparing arrays vs linked list architectures.</p>
+            <table class="complexity-table">
+                <tr>
+                    <th>Operation</th>
+                    <th>Array / Vector</th>
+                    <th>Singly Linked</th>
+                    <th>Doubly Linked</th>
+                </tr>
+                <tr>
+                    <td>Access by Index (Search)</td>
+                    <td class="good">O(1)</td>
+                    <td class="bad">O(N)</td>
+                    <td class="bad">O(N)</td>
+                </tr>
+                <tr>
+                    <td>Insert / Delete at Start</td>
+                    <td class="bad">O(N)</td>
+                    <td class="good">O(1)</td>
+                    <td class="good">O(1)</td>
+                </tr>
+                <tr>
+                    <td>Insert / Delete at End</td>
+                    <td class="avg">O(1) Amortized</td>
+                    <td class="bad">O(N) (w/o tail ptr)</td>
+                    <td class="good">O(1)</td>
+                </tr>
+                <tr>
+                    <td>Delete a Specific Node (if pointer known)</td>
+                    <td class="bad">O(N)</td>
+                    <td class="bad">O(N) (Must find prev)</td>
+                    <td class="good">O(1)</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- 1. Singly Linked List -->
+        <div class="card" id="card-singly">
+            <h2>1. Singly Linked List</h2>
+            <div class="grid-2">
+                <div>
+                    <p><strong>Architecture:</strong> Begins with a <code>head</code> pointer. Each node contains data and a single <code>next</code> pointer holding the memory address of the adjacent node. Strictly terminates with a <code>nullptr</code>.</p>
+                    <div class="mnemonic">
+                        💡 <strong>Mnemonic: "O.W.S." (One Way Street)</strong><br>
+                        You can only drive forward. If you miss a house, you have to go all the way back to the start.
+                    </div>
+                </div>
+
+                <div class="code-explorer">
+                    <div class="tabs">
+                        <button class="tab-btn active" onclick="switchTab('singly', 'start', event)">Insert Start</button>
+                        <button class="tab-btn" onclick="switchTab('singly', 'end', event)">Insert End</button>
+                        <button class="tab-btn" onclick="switchTab('singly', 'mid', event)">Insert Middle</button>
+                        <button class="tab-btn" onclick="switchTab('singly', 'del', event)">Delete Node</button>
+                        <button class="tab-btn" style="color: #facc15;" onclick="switchTab('singly', 'rev', event)">Reverse List</button>
+                    </div>
+                    <div class="code-panels">
+<pre id="singly-start" class="code-panel active"><code><span class="kw">class</span> <span class="ty">SinglyLinkedList</span> {
+<span class="kw">private</span>:
+    <span class="kw">struct</span> <span class="ty">Node</span> { <span class="ty">int</span> data; <span class="ty">Node</span>* next; <span class="fn">Node</span>(<span class="ty">int</span> v) : data(v), next(<span class="kw">nullptr</span>) {} };
+    <span class="ty">Node</span>* head;
+<span class="kw">public</span>:
+    <span class="fn">SinglyLinkedList</span>() : head(<span class="kw">nullptr</span>) {}
+
+    <span class="ty">void</span> <span class="fn">insert_start</span>(<span class="ty">int</span> val) {
+        <span class="ty">Node</span>* newNode <span class="op">=</span> <span class="kw">new</span> <span class="ty">Node</span>(val);
+        newNode<span class="op">-></span>next <span class="op">=</span> head;
+        head <span class="op">=</span> newNode;
+    }
+};</code></pre>
+
+<pre id="singly-end" class="code-panel"><code><span class="kw">class</span> <span class="ty">SinglyLinkedList</span> {
+<span class="kw">private</span>:
+    <span class="kw">struct</span> <span class="ty">Node</span> { <span class="ty">int</span> data; <span class="ty">Node</span>* next; <span class="fn">Node</span>(<span class="ty">int</span> v) : data(v), next(<span class="kw">nullptr</span>) {} };
+    <span class="ty">Node</span>* head;
+<span class="kw">public</span>:
+    <span class="fn">SinglyLinkedList</span>() : head(<span class="kw">nullptr</span>) {}
+
+    <span class="ty">void</span> <span class="fn">insert_end</span>(<span class="ty">int</span> val) {
+        <span class="ty">Node</span>* newNode <span class="op">=</span> <span class="kw">new</span> <span class="ty">Node</span>(val);
+        <span class="kw">if</span> (<span class="op">!</span>head) { head <span class="op">=</span> newNode; <span class="kw">return</span>; }
+        
+        <span class="ty">Node</span>* temp <span class="op">=</span> head;
+        <span class="kw">while</span> (temp<span class="op">-></span>next) temp <span class="op">=</span> temp<span class="op">-></span>next;
+        temp<span class="op">-></span>next <span class="op">=</span> newNode;
+    }
+};</code></pre>
+
+<pre id="singly-mid" class="code-panel"><code><span class="kw">class</span> <span class="ty">SinglyLinkedList</span> {
+<span class="kw">private</span>:
+    <span class="kw">struct</span> <span class="ty">Node</span> { <span class="ty">int</span> data; <span class="ty">Node</span>* next; <span class="fn">Node</span>(<span class="ty">int</span> v) : data(v), next(<span class="kw">nullptr</span>) {} };
+    <span class="ty">Node</span>* head;
+<span class="kw">public</span>:
+    <span class="fn">SinglyLinkedList</span>() : head(<span class="kw">nullptr</span>) {}
+
+    <span class="ty">void</span> <span class="fn">insert_after</span>(<span class="ty">int</span> pos, <span class="ty">int</span> val) {
+        <span class="ty">Node</span>* temp <span class="op">=</span> head;
+        <span class="kw">for</span>(<span class="ty">int</span> i <span class="op">=</span> <span class="nu">0</span>; i <span class="op">&lt;</span> pos <span class="op">&&</span> temp; i<span class="op">++</span>) temp <span class="op">=</span> temp<span class="op">-></span>next;
+        
+        <span class="kw">if</span> (temp) {
+            <span class="ty">Node</span>* newNode <span class="op">=</span> <span class="kw">new</span> <span class="ty">Node</span>(val);
+            newNode<span class="op">-></span>next <span class="op">=</span> temp<span class="op">-></span>next;
+            temp<span class="op">-></span>next <span class="op">=</span> newNode;
+        }
+    }
+};</code></pre>
+
+<pre id="singly-del" class="code-panel"><code><span class="kw">class</span> <span class="ty">SinglyLinkedList</span> {
+<span class="kw">private</span>:
+    <span class="kw">struct</span> <span class="ty">Node</span> { <span class="ty">int</span> data; <span class="ty">Node</span>* next; <span class="fn">Node</span>(<span class="ty">int</span> v) : data(v), next(<span class="kw">nullptr</span>) {} };
+    <span class="ty">Node</span>* head;
+<span class="kw">public</span>:
+    <span class="fn">SinglyLinkedList</span>() : head(<span class="kw">nullptr</span>) {}
+
+    <span class="ty">void</span> <span class="fn">delete_val</span>(<span class="ty">int</span> val) {
+        <span class="kw">if</span> (<span class="op">!</span>head) <span class="kw">return</span>;
+        <span class="kw">if</span> (head<span class="op">-></span>data <span class="op">==</span> val) {
+            <span class="ty">Node</span>* toDelete <span class="op">=</span> head;
+            head <span class="op">=</span> head<span class="op">-></span>next;
+            <span class="kw">delete</span> toDelete;
+            <span class="kw">return</span>;
+        }
+        <span class="ty">Node</span>* temp <span class="op">=</span> head;
+        <span class="kw">while</span> (temp<span class="op">-></span>next <span class="op">&&</span> temp<span class="op">-></span>next<span class="op">-></span>data <span class="op">!=</span> val) temp <span class="op">=</span> temp<span class="op">-></span>next;
+        
+        <span class="kw">if</span> (temp<span class="op">-></span>next) {
+            <span class="ty">Node</span>* toDelete <span class="op">=</span> temp<span class="op">-></span>next;
+            temp<span class="op">-></span>next <span class="op">=</span> temp<span class="op">-></span>next<span class="op">-></span>next;
+            <span class="kw">delete</span> toDelete;
+        }
+    }
+};</code></pre>
+
+<pre id="singly-rev" class="code-panel"><code><span class="kw">class</span> <span class="ty">SinglyLinkedList</span> {
+<span class="kw">private</span>:
+    <span class="kw">struct</span> <span class="ty">Node</span> { <span class="ty">int</span> data; <span class="ty">Node</span>* next; <span class="fn">Node</span>(<span class="ty">int</span> v) : data(v), next(<span class="kw">nullptr</span>) {} };
+    <span class="ty">Node</span>* head;
+<span class="kw">public</span>:
+    <span class="fn">SinglyLinkedList</span>() : head(<span class="kw">nullptr</span>) {}
+
+    <span class="ty">void</span> <span class="fn">reverse</span>() {
+        <span class="ty">Node</span>* prev <span class="op">=</span> <span class="kw">nullptr</span>;
+        <span class="ty">Node</span>* current <span class="op">=</span> head;
+        <span class="ty">Node</span>* next <span class="op">=</span> <span class="kw">nullptr</span>;
+        
+        <span class="kw">while</span> (current <span class="op">!=</span> <span class="kw">nullptr</span>) {
+            next <span class="op">=</span> current<span class="op">-></span>next;
+            current<span class="op">-></span>next <span class="op">=</span> prev; 
+            prev <span class="op">=</span> current;       
+            current <span class="op">=</span> next;       
+        }
+        head <span class="op">=</span> prev; 
+    }
+};</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="simulation-container">
+                <div class="controls-grid">
+                    <button class="sim-btn" onclick="simInsert('singly', 'start')">⚡ Insert Start</button>
+                    <button class="sim-btn" onclick="simInsert('singly', 'mid')">⚡ Insert Middle</button>
+                    <button class="sim-btn" onclick="simInsert('singly', 'end')">⚡ Insert End</button>
+                    <button class="sim-btn" onclick="simDelete('singly')">🗑️ Delete</button>
+                    <button class="sim-btn search" onclick="simSearch('singly')">🔍 Sim: Traversal Search</button>
+                    <button class="sim-btn search" onclick="simReverse()">🔄 Sim: Reverse List</button>
+                    <button class="sim-btn reset-btn" onclick="simReset('singly')">Reset</button>
+                </div>
+                <div class="simulation-area" id="sim-singly">
+                    <div class="null-indicator" id="singly-null">NULL</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Circular Singly Linked List -->
+        <div class="card" id="card-csingly">
+            <h2>2. Circular Singly Linked List</h2>
+            <div class="grid-2">
+                <div>
+                    <p><strong>Architecture:</strong> Like a singly list, but the last node points back to the first node's memory address instead of <code>nullptr</code>.</p>
+                    <div class="mnemonic">
+                        💡 <strong>Mnemonic: "R.R.R." (Round Robin Roulette)</strong><br>
+                        Once you pass the last spot, you land right back on the first node. There is no end.
+                    </div>
+                </div>
+
+                <div class="code-explorer">
+                    <div class="tabs">
+                        <button class="tab-btn active" onclick="switchTab('csingly', 'start', event)">Insert Start</button>
+                        <button class="tab-btn" onclick="switchTab('csingly', 'end', event)">Insert End</button>
+                        <button class="tab-btn" onclick="switchTab('csingly', 'del', event)">Delete Start</button>
+                    </div>
+                    <div class="code-panels">
+<pre id="csingly-start" class="code-panel active"><code><span class="kw">class</span> <span class="ty">CircularSinglyList</span> {
+<span class="kw">private</span>:
+    <span class="kw">struct</span> <span class="ty">Node</span> { <span class="ty">int</span> data; <span class="ty">Node</span>* next; <span class="fn">Node</span>(<span class="ty">int</span> v) : data(v), next(<span class="kw">nullptr</span>) {} };
+    <span class="ty">Node</span>* tail; <span class="cm">// We track the tail! Because tail->next is the head.</span>
+<span class="kw">public</span>:
+    <span class="fn">CircularSinglyList</span>() : tail(<span class="kw">nullptr</span>) {}
+
+    <span class="ty">void</span> <span class="fn">insert_start</span>(<span class="ty">int</span> val) {
+        <span class="ty">Node</span>* newNode <span class="op">=</span> <span class="kw">new</span> <span class="ty">Node</span>(val);
+        <span class="kw">if</span> (<span class="op">!</span>tail) {
+            tail <span class="op">=</span> newNode;
+            tail<span class="op">-></span>next <span class="op">=</span> tail;
+        } <span class="kw">else</span> {
+            newNode<span class="op">-></span>next <span class="op">=</span> tail<span class="op">-></span>next;
+            tail<span class="op">-></span>next <span class="op">=</span> newNode;
+        }
+    }
+};</code></pre>
+
+<pre id="csingly-end" class="code-panel"><code><span class="kw">class</span> <span class="ty">CircularSinglyList</span> {
+<span class="kw">private</span>:
+    <span class="kw">struct</span> <span class="ty">Node</span> { <span class="ty">int</span> data; <span class="ty">Node</span>* next; <span class="fn">Node</span>(<span class="ty">int</span> v) : data(v), next(<span class="kw">nullptr</span>) {} };
+    <span class="ty">Node</span>* tail;
+<span class="kw">public</span>:
+    <span class="fn">CircularSinglyList</span>() : tail(<span class="kw">nullptr</span>) {}
+
+    <span class="ty">void</span> <span class="fn">insert_end</span>(<span class="ty">int</span> val) {
+        <span class="ty">Node</span>* newNode <span class="op">=</span> <span class="kw">new</span> <span class="ty">Node</span>(val);
+        <span class="kw">if</span> (<span class="op">!</span>tail) {
+            tail <span class="op">=</span> newNode;
+            tail<span class="op">-></span>next <span class="op">=</span> tail;
+        } <span class="kw">else</span> {
+            newNode<span class="op">-></span>next <span class="op">=</span> tail<span class="op">-></span>next;
+            tail<span class="op">-></span>next <span class="op">=</span> newNode;
+            tail <span class="op">=</span> newNode; <span class="cm">// Only difference! Update tail</span>
+        }
+    }
+};</code></pre>
+
+<pre id="csingly-del" class="code-panel"><code><span class="kw">class</span> <span class="ty">CircularSinglyList</span> {
+<span class="kw">private</span>:
+    <span class="kw">struct</span> <span class="ty">Node</span> { <span class="ty">int</span> data; <span class="ty">Node</span>* next; <span class="fn">Node</span>(<span class="ty">int</span> v) : data(v), next(<span class="kw">nullptr</span>) {} };
+    <span class="ty">Node</span>* tail;
+<span class="kw">public</span>:
+    <span class="fn">CircularSinglyList</span>() : tail(<span class="kw">nullptr</span>) {}
+
+    <span class="ty">void</span> <span class="fn">delete_start</span>() {
+        <span class="kw">if</span> (<span class="op">!</span>tail) <span class="kw">return</span>;
+        <span class="ty">Node</span>* head <span class="op">=</span> tail<span class="op">-></span>next;
+        
+        <span class="kw">if</span> (tail <span class="op">==</span> head) { 
+            <span class="kw">delete</span> head;
+            tail <span class="op">=</span> <span class="kw">nullptr</span>;
+        } <span class="kw">else</span> {
+            tail<span class="op">-></span>next <span class="op">=</span> head<span class="op">-></span>next;
+            <span class="kw">delete</span> head;
+        }
+    }
+};</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="simulation-container">
+                <div class="controls-grid">
+                    <button class="sim-btn" onclick="simInsert('csingly', 'start')">⚡ Insert Start</button>
+                    <button class="sim-btn" onclick="simInsert('csingly', 'end')">⚡ Insert End</button>
+                    <button class="sim-btn" onclick="simDelete('csingly')">🗑️ Delete</button>
+                    <button class="sim-btn search" onclick="simSearch('csingly')">🔍 Sim: Traversal Search</button>
+                    <button class="sim-btn reset-btn" onclick="simReset('csingly')">Reset</button>
+                </div>
+                <div class="simulation-area" id="sim-csingly">
+                    <div id="csingly-line" class="circular-line" style="height: 40px; border-top: none; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; top: 70px; left: 50px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Doubly Linked List -->
+        <div class="card" id="card-doubly">
+            <h2>3. Doubly Linked List</h2>
+            <div class="grid-2">
+                <div>
+                    <p><strong>Architecture:</strong> Two pointers per node! Forward and backward traversal via <code>next</code> and <code>prev</code> memory addresses.</p>
+                    <div class="mnemonic">
+                        💡 <strong>Mnemonic: "T.W.A." (Two Way Avenue)</strong><br>
+                        You can walk up the avenue, drop your keys, and instantly walk backwards without going around the block.
+                    </div>
+                </div>
+
+                <div class="code-explorer">
+                    <div class="tabs">
+                        <button class="tab-btn active" onclick="switchTab('doubly', 'start', event)">Insert Start</button>
+                        <button class="tab-btn" onclick="switchTab('doubly', 'end', event)">Insert End</button>
+                        <button class="tab-btn" onclick="switchTab('doubly', 'mid', event)">Insert Middle</button>
+                        <button class="tab-btn" onclick="switchTab('doubly', 'del', event)">Delete Node</button>
+                    </div>
+                    <div class="code-panels">
+<pre id="doubly-start" class="code-panel active"><code><span class="kw">class</span> <span class="ty">DoublyLinkedList</span> {
+<span class="kw">private</span>:
+    <span class="kw">struct</span> <span class="ty">Node</span> { <span class="ty">int</span> data; <span class="ty">Node</span>* next; <span class="ty">Node</span>* prev; <span class="fn">Node</span>(<span class="ty">int</span> v) : data(v), next(<span class="kw">nullptr</span>), prev(<span class="kw">nullptr</span>) {} };
+    <span class="ty">Node</span>* head; <span class="ty">Node</span>* tail;
+<span class="kw">public</span>:
+    <span class="fn">DoublyLinkedList</span>() : head(<span class="kw">nullptr</span>), tail(<span class="kw">nullptr</span>) {}
+
+    <span class="ty">void</span> <span class="fn">insert_start</span>(<span class="ty">int</span> val) {
+        <span class="ty">Node</span>* newNode <span class="op">=</span> <span class="kw">new</span> <span class="ty">Node</span>(val);
+        <span class="kw">if</span> (<span class="op">!</span>head) { head <span class="op">=</span> tail <span class="op">=</span> newNode; <span class="kw">return</span>; }
+        newNode<span class="op">-></span>next <span class="op">=</span> head;
+        head<span class="op">-></span>prev <span class="op">=</span> newNode;
+        head <span class="op">=</span> newNode;
+    }
+};</code></pre>
+
+<pre id="doubly-end" class="code-panel"><code><span class="kw">class</span> <span class="ty">DoublyLinkedList</span> {
+<span class="kw">private</span>:
+    <span class="kw">struct</span> <span class="ty">Node</span> { <span class="ty">int</span> data; <span class="ty">Node</span>* next; <span class="ty">Node</span>* prev; <span class="fn">Node</span>(<span class="ty">int</span> v) : data(v), next(<span class="kw">nullptr</span>), prev(<span class="kw">nullptr</span>) {} };
+    <span class="ty">Node</span>* head; <span class="ty">Node</span>* tail;
+<span class="kw">public</span>:
+    <span class="fn">DoublyLinkedList</span>() : head(<span class="kw">nullptr</span>), tail(<span class="kw">nullptr</span>) {}
+
+    <span class="ty">void</span> <span class="fn">insert_end</span>(<span class="ty">int</span> val) {
+        <span class="ty">Node</span>* newNode <span class="op">=</span> <span class="kw">new</span> <span class="ty">Node</span>(val);
+        <span class="kw">if</span> (<span class="op">!</span>tail) { head <span class="op">=</span> tail <span class="op">=</span> newNode; <span class="kw">return</span>; }
+        tail<span class="op">-></span>next <span class="op">=</span> newNode;
+        newNode<span class="op">-></span>prev <span class="op">=</span> tail;
+        tail <span class="op">=</span> newNode;
+    }
+};</code></pre>
+
+<pre id="doubly-mid" class="code-panel"><code><span class="kw">class</span> <span class="ty">DoublyLinkedList</span> {
+<span class="kw">private</span>:
+    <span class="kw">struct</span> <span class="ty">Node</span> { <span class="ty">int</span> data; <span class="ty">Node</span>* next; <span class="ty">Node</span>* prev; <span class="fn">Node</span>(<span class="ty">int</span> v) : data(v), next(<span class="kw">nullptr</span>), prev(<span class="kw">nullptr</span>) {} };
+    <span class="ty">Node</span>* head; <span class="ty">Node</span>* tail;
+<span class="kw">public</span>:
+    <span class="fn">DoublyLinkedList</span>() : head(<span class="kw">nullptr</span>), tail(<span class="kw">nullptr</span>) {}
+
+    <span class="ty">void</span> <span class="fn">insert_after</span>(<span class="ty">Node</span>* target, <span class="ty">int</span> val) {
+        <span class="kw">if</span> (<span class="op">!</span>target) <span class="kw">return</span>;
+        <span class="ty">Node</span>* newNode <span class="op">=</span> <span class="kw">new</span> <span class="ty">Node</span>(val);
+        
+        newNode<span class="op">-></span>next <span class="op">=</span> target<span class="op">-></span>next;
+        newNode<span class="op">-></span>prev <span class="op">=</span> target;
+        
+        <span class="kw">if</span> (target<span class="op">-></span>next) target<span class="op">-></span>next<span class="op">-></span>prev <span class="op">=</span> newNode;
+        <span class="kw">else</span> tail <span class="op">=</span> newNode; 
+        
+        target<span class="op">-></span>next <span class="op">=</span> newNode;
+    }
+};</code></pre>
+
+<pre id="doubly-del" class="code-panel"><code><span class="kw">class</span> <span class="ty">DoublyLinkedList</span> {
+<span class="kw">private</span>:
+    <span class="kw">struct</span> <span class="ty">Node</span> { <span class="ty">int</span> data; <span class="ty">Node</span>* next; <span class="ty">Node</span>* prev; <span class="fn">Node</span>(<span class="ty">int</span> v) : data(v), next(<span class="kw">nullptr</span>), prev(<span class="kw">nullptr</span>) {} };
+    <span class="ty">Node</span>* head; <span class="ty">Node</span>* tail;
+<span class="kw">public</span>:
+    <span class="fn">DoublyLinkedList</span>() : head(<span class="kw">nullptr</span>), tail(<span class="kw">nullptr</span>) {}
+
+    <span class="ty">void</span> <span class="fn">delete_node</span>(<span class="ty">Node</span>* node) {
+        <span class="kw">if</span> (<span class="op">!</span>node) <span class="kw">return</span>;
+        
+        <span class="kw">if</span> (node<span class="op">-></span>prev) node<span class="op">-></span>prev<span class="op">->next</span> <span class="op">=</span> node<span class="op">-></span>next;
+        <span class="kw">else</span> head <span class="op">=</span> node<span class="op">-></span>next;
+        
+        <span class="kw">if</span> (node<span class="op">-></span>next) node<span class="op">-></span>next<span class="op">->prev</span> <span class="op">=</span> node<span class="op">-></span>prev;
+        <span class="kw">else</span> tail <span class="op">=</span> node<span class="op">-></span>prev;
+        
+        <span class="kw">delete</span> node;
+    }
+};</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="simulation-container">
+                <div class="controls-grid">
+                    <button class="sim-btn" onclick="simInsert('doubly', 'start')">⚡ Insert Start</button>
+                    <button class="sim-btn" onclick="simInsert('doubly', 'mid')">⚡ Insert Middle</button>
+                    <button class="sim-btn" onclick="simInsert('doubly', 'end')">⚡ Insert End</button>
+                    <button class="sim-btn" onclick="simDelete('doubly')">🗑️ Delete</button>
+                    <button class="sim-btn search" onclick="simSearch('doubly')">🔍 Sim: Traversal Search</button>
+                    <button class="sim-btn reset-btn" onclick="simReset('doubly')">Reset</button>
+                </div>
+                <div class="simulation-area" id="sim-doubly">
+                    <div class="null-indicator" id="doubly-null">NULL</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 4. Circular Doubly Linked List -->
+        <div class="card" id="card-cdoubly">
+            <h2>4. Circular Doubly Linked List</h2>
+            <div class="grid-2">
+                <div>
+                    <p><strong>Architecture:</strong> The ultimate structure. Doubly linked, but the last node connects to the first. No <code>nullptr</code> edge cases ever exist in a populated list.</p>
+                    <div class="mnemonic">
+                        💡 <strong>Mnemonic: "M.G.R." (Merry Go Round)</strong><br>
+                        You can walk left (prev) or right (next) continuously without ever hitting an edge or a wall.
+                    </div>
+                </div>
+
+                <div class="code-explorer">
+                    <div class="tabs">
+                        <button class="tab-btn active" onclick="switchTab('cdoubly', 'start', event)">Insert Start</button>
+                        <button class="tab-btn" onclick="switchTab('cdoubly', 'end', event)">Insert End</button>
+                        <button class="tab-btn" onclick="switchTab('cdoubly', 'del', event)">Delete Node</button>
+                    </div>
+                    <div class="code-panels">
+<pre id="cdoubly-start" class="code-panel active"><code><span class="kw">class</span> <span class="ty">CircularDoublyList</span> {
+<span class="kw">private</span>:
+    <span class="kw">struct</span> <span class="ty">Node</span> { <span class="ty">int</span> data; <span class="ty">Node</span>* next; <span class="ty">Node</span>* prev; <span class="fn">Node</span>(<span class="ty">int</span> v) : data(v), next(<span class="kw">this</span>), prev(<span class="kw">this</span>) {} };
+    <span class="ty">Node</span>* head;
+<span class="kw">public</span>:
+    <span class="fn">CircularDoublyList</span>() : head(<span class="kw">nullptr</span>) {}
+
+    <span class="ty">void</span> <span class="fn">insert_start</span>(<span class="ty">int</span> val) {
+        <span class="ty">Node</span>* newNode <span class="op">=</span> <span class="kw">new</span> <span class="ty">Node</span>(val);
+        <span class="kw">if</span> (<span class="op">!</span>head) { head <span class="op">=</span> newNode; <span class="kw">return</span>; }
+        
+        <span class="ty">Node</span>* tail <span class="op">=</span> head<span class="op">-></span>prev;
+        
+        newNode<span class="op">-></span>next <span class="op">=</span> head;
+        newNode<span class="op">-></span>prev <span class="op">=</span> tail;
+        tail<span class="op">-></span>next <span class="op">=</span> newNode;
+        head<span class="op">-></span>prev <span class="op">=</span> newNode;
+        
+        head <span class="op">=</span> newNode; <span class="cm">// Move head backward</span>
+    }
+};</code></pre>
+
+<pre id="cdoubly-end" class="code-panel"><code><span class="kw">class</span> <span class="ty">CircularDoublyList</span> {
+<span class="kw">private</span>:
+    <span class="kw">struct</span> <span class="ty">Node</span> { <span class="ty">int</span> data; <span class="ty">Node</span>* next; <span class="ty">Node</span>* prev; <span class="fn">Node</span>(<span class="ty">int</span> v) : data(v), next(<span class="kw">this</span>), prev(<span class="kw">this</span>) {} };
+    <span class="ty">Node</span>* head;
+<span class="kw">public</span>:
+    <span class="fn">CircularDoublyList</span>() : head(<span class="kw">nullptr</span>) {}
+
+    <span class="ty">void</span> <span class="fn">insert_end</span>(<span class="ty">int</span> val) {
+        <span class="ty">Node</span>* newNode <span class="op">=</span> <span class="kw">new</span> <span class="ty">Node</span>(val);
+        <span class="kw">if</span> (<span class="op">!</span>head) { head <span class="op">=</span> newNode; <span class="kw">return</span>; }
+        
+        <span class="ty">Node</span>* tail <span class="op">=</span> head<span class="op">-></span>prev;
+        
+        newNode<span class="op">-></span>next <span class="op">=</span> head;
+        newNode<span class="op">-></span>prev <span class="op">=</span> tail;
+        tail<span class="op">-></span>next <span class="op">=</span> newNode;
+        head<span class="op">-></span>prev <span class="op">=</span> newNode;
+        
+        <span class="cm">// DO NOT move head backward. New node becomes tail automatically.</span>
+    }
+};</code></pre>
+
+<pre id="cdoubly-del" class="code-panel"><code><span class="kw">class</span> <span class="ty">CircularDoublyList</span> {
+<span class="kw">private</span>:
+    <span class="kw">struct</span> <span class="ty">Node</span> { <span class="ty">int</span> data; <span class="ty">Node</span>* next; <span class="ty">Node</span>* prev; <span class="fn">Node</span>(<span class="ty">int</span> v) : data(v), next(<span class="kw">this</span>), prev(<span class="kw">this</span>) {} };
+    <span class="ty">Node</span>* head;
+<span class="kw">public</span>:
+    <span class="fn">CircularDoublyList</span>() : head(<span class="kw">nullptr</span>) {}
+
+    <span class="ty">void</span> <span class="fn">delete_node</span>(<span class="ty">Node</span>* node) {
+        <span class="kw">if</span> (<span class="op">!</span>node) <span class="kw">return</span>;
+        
+        <span class="kw">if</span> (node<span class="op">-></span>next <span class="op">==</span> node) { 
+            head <span class="op">=</span> <span class="kw">nullptr</span>;
+        } <span class="kw">else</span> {
+            node<span class="op">-></span>prev<span class="op">-></span>next <span class="op">=</span> node<span class="op">-></span>next;
+            node<span class="op">-></span>next<span class="op">-></span>prev <span class="op">=</span> node<span class="op">-></span>prev;
+            <span class="kw">if</span> (head <span class="op">==</span> node) head <span class="op">=</span> node<span class="op">-></span>next;
+        }
+        <span class="kw">delete</span> node;
+    }
+};</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="simulation-container">
+                <div class="controls-grid">
+                    <button class="sim-btn" onclick="simInsert('cdoubly', 'start')">⚡ Insert Start</button>
+                    <button class="sim-btn" onclick="simInsert('cdoubly', 'end')">⚡ Insert End</button>
+                    <button class="sim-btn" onclick="simDelete('cdoubly')">🗑️ Delete</button>
+                    <button class="sim-btn search" onclick="simSearch('cdoubly')">🔍 Sim: Traversal Search</button>
+                    <button class="sim-btn reset-btn" onclick="simReset('cdoubly')">Reset</button>
+                </div>
+                <div class="simulation-area" id="sim-cdoubly">
+                    <div id="cdoubly-line-top" class="circular-line" style="border-color: var(--accent-1); height: 30px; border-bottom: none; border-top-left-radius: 15px; border-top-right-radius: 15px; top: 10px; left: 50px;"></div>
+                    <div id="cdoubly-line-bottom" class="circular-line" style="border-color: var(--accent-3); height: 30px; border-top: none; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; top: 75px; left: 50px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script logic -->
+    <script>
+        function getFakeHex() {
+            return '0x' + Math.floor(Math.random()*256).toString(16).padStart(2, '0').toUpperCase();
+        }
+
+        function switchTab(cardId, opType, event) {
+            const card = document.getElementById(`card-${cardId}`);
+            card.querySelectorAll('.code-panel').forEach(p => p.classList.remove('active'));
+            card.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            card.querySelector(`#${cardId}-${opType}`).classList.add('active');
+            if (event) event.currentTarget.classList.add('active');
+        }
+
+        const state = { 'singly': { count: 0 }, 'csingly': { count: 0 }, 'doubly': { count: 0 }, 'cdoubly': { count: 0 } };
+
+        function createNodeHtml(data, type) {
+            const addr = getFakeHex();
+            return `
+                <div class="node-box" data-addr="${addr}">
+                    <div class="node-addr">${addr}</div>
+                    <div class="node-data">${data}</div>
+                    <div class="node-ptr">...</div>
+                </div>
+            `;
+        }
+
+        function createArrowHtml(type) {
+            if (type.includes('doubly')) return `<div class="arrow">↔</div>`;
+            return `<div class="arrow">→</div>`;
+        }
+
+        function simInsert(type, position) {
+            state[type].count++;
+            let val = state[type].count;
+            let container = document.getElementById(`sim-${type}`);
+            let wrappers = Array.from(container.querySelectorAll('.node-wrapper'));
+            
+            let newNode = document.createElement('div');
+            newNode.className = 'node-wrapper';
+            
+            if (position === 'start') {
+                if (wrappers.length > 0) wrappers[0].insertAdjacentHTML('afterbegin', createArrowHtml(type));
+                newNode.innerHTML = createNodeHtml(val, type);
+                let firstElement = wrappers[0] || container.querySelector('.null-indicator, .circular-line');
+                container.insertBefore(newNode, firstElement);
+            } else if (position === 'end') {
+                if (wrappers.length > 0) newNode.innerHTML = createArrowHtml(type) + createNodeHtml(val, type);
+                else newNode.innerHTML = createNodeHtml(val, type);
+                let endElement = container.querySelector('.null-indicator, .circular-line');
+                container.insertBefore(newNode, endElement);
+            } else if (position === 'mid') {
+                if (wrappers.length < 2) return simInsert(type, 'end');
+                let midIndex = Math.floor(wrappers.length / 2);
+                newNode.innerHTML = createArrowHtml(type) + createNodeHtml(val, type);
+                container.insertBefore(newNode, wrappers[midIndex]);
+            }
+            
+            updateState(type, wrappers.length + 1);
+        }
+
+        function simDelete(type) {
+            let container = document.getElementById(`sim-${type}`);
+            let wrappers = Array.from(container.querySelectorAll('.node-wrapper'));
+            if (wrappers.length === 0) return;
+            
+            let indexToDelete = Math.floor((wrappers.length - 1) / 2);
+            let toDelete = wrappers[indexToDelete];
+            
+            if (indexToDelete === 0 && wrappers.length > 1) {
+                let arrow = wrappers[1].querySelector('.arrow');
+                if (arrow) arrow.remove();
+            }
+            
+            toDelete.style.transform = 'scale(0)';
+            toDelete.style.opacity = '0';
+            setTimeout(() => {
+                toDelete.remove();
+                updateState(type, wrappers.length - 1);
+            }, 300);
+        }
+
+        async function simSearch(type) {
+            const container = document.getElementById(`sim-${type}`);
+            const wrappers = Array.from(container.querySelectorAll('.node-wrapper'));
+            if (wrappers.length === 0) return;
+            
+            const targetIndex = Math.floor(wrappers.length * 0.75);
+            
+            for (let i = 0; i < wrappers.length; i++) {
+                const box = wrappers[i].querySelector('.node-box');
+                box.style.boxShadow = '0 0 20px #facc15';
+                box.style.borderColor = '#facc15';
+                
+                await new Promise(r => setTimeout(r, 500)); 
+                
+                if (i === targetIndex) {
+                    box.style.boxShadow = '0 0 25px #4ade80';
+                    box.style.borderColor = '#4ade80';
+                    setTimeout(() => {
+                        box.style.boxShadow = '0 4px 15px rgba(59, 130, 246, 0.3)';
+                        box.style.borderColor = 'var(--accent-1)';
+                    }, 2000);
+                    return;
+                } else {
+                    box.style.boxShadow = '0 4px 15px rgba(59, 130, 246, 0.3)';
+                    box.style.borderColor = 'var(--accent-1)';
+                }
+            }
+        }
+
+        async function simReverse() {
+            const container = document.getElementById('sim-singly');
+            const wrappers = Array.from(container.querySelectorAll('.node-wrapper'));
+            if (wrappers.length < 2) return;
+            
+            wrappers.reverse();
+            
+            wrappers.forEach(w => {
+                container.insertBefore(w, document.getElementById('singly-null'));
+                const arrow = w.querySelector('.arrow');
+                if (arrow) arrow.remove();
+            });
+            
+            for (let i = 1; i < wrappers.length; i++) {
+                wrappers[i].insertAdjacentHTML('afterbegin', `<div class="arrow">→</div>`);
+            }
+            updateState('singly', wrappers.length);
+        }
+
+        function simReset(type) {
+            state[type].count = 0;
+            let container = document.getElementById(`sim-${type}`);
+            let wrappers = container.querySelectorAll('.node-wrapper');
+            wrappers.forEach(w => w.remove());
+            updateState(type, 0);
+        }
+
+        function updateState(type, count) {
+            const container = document.getElementById(`sim-${type}`);
+            if (count > 0) container.classList.add('has-nodes');
+            else container.classList.remove('has-nodes');
+
+            const wrappers = Array.from(container.querySelectorAll('.node-wrapper'));
+            wrappers.forEach((w, index) => {
+                const ptrDiv = w.querySelector('.node-ptr');
+                let nextAddr = 'NULL';
+                let prevAddr = 'NULL';
+                
+                if (index < wrappers.length - 1) {
+                    nextAddr = wrappers[index+1].querySelector('.node-box').dataset.addr;
+                } else if (type === 'csingly' || type === 'cdoubly') {
+                    if (wrappers.length > 0) nextAddr = wrappers[0].querySelector('.node-box').dataset.addr;
+                }
+                
+                if (type.includes('doubly')) {
+                    if (index > 0) prevAddr = wrappers[index-1].querySelector('.node-box').dataset.addr;
+                    else if (type === 'cdoubly') {
+                        if (wrappers.length > 0) prevAddr = wrappers[wrappers.length-1].querySelector('.node-box').dataset.addr;
+                    }
+                    ptrDiv.innerHTML = `<span style="color:#38bdf8">P:${prevAddr}</span> | <span style="color:#f472b6">N:${nextAddr}</span>`;
+                } else {
+                    ptrDiv.innerHTML = `<span style="color:#f472b6">N:${nextAddr}</span>`;
+                }
+            });
+
+            if (type === 'csingly') {
+                const line = document.getElementById('csingly-line');
+                if (count > 0) {
+                    line.classList.add('active');
+                    line.style.width = `${count * 105}px`;
+                } else line.classList.remove('active');
+            } else if (type === 'cdoubly') {
+                const lineTop = document.getElementById('cdoubly-line-top');
+                const lineBottom = document.getElementById('cdoubly-line-bottom');
+                if (count > 0) {
+                    lineTop.classList.add('active');
+                    lineTop.style.width = `${count * 105}px`;
+                    lineBottom.classList.add('active');
+                    lineBottom.style.width = `${count * 105}px`;
+                } else {
+                    lineTop.classList.remove('active');
+                    lineBottom.classList.remove('active');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
